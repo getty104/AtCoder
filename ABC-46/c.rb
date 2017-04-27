@@ -17,11 +17,15 @@ def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times {|i|yield(i)}                    end
 def repl(st,en,n=1);       n*= -1 if st>en;st.step(en,n){|i|yield(i)} end
 
-def func n,x
-	n >= 0 ? n/x + 1 : 0
+n = gif
+a,b = 1,1
+
+rep n do
+	m = gf
+	d = max (a/m[0]).ceil.to_i, (b/m[1]).ceil.to_i
+	 a = (m[0]*d).to_f
+	 b = (m[1]*d).to_f
 end
 
-a,b,x = gi
-ans = 0
-puts func(b,x) - func(a-1,x)
+puts (a+b).to_i
 

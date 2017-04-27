@@ -17,11 +17,14 @@ def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times {|i|yield(i)}                    end
 def repl(st,en,n=1);       n*= -1 if st>en;st.step(en,n){|i|yield(i)} end
 
-def func n,x
-	n >= 0 ? n/x + 1 : 0
-end
+pl = Hash.new
+pl['a'] = gc
+pl['b'] = gc
+pl['c'] = gc
+turn = 'a'
+loop{
+break	if pl[turn].empty?
+turn = pl[turn].shift
+}
 
-a,b,x = gi
-ans = 0
-puts func(b,x) - func(a-1,x)
-
+puts turn.upcase

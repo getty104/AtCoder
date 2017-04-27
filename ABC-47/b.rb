@@ -17,11 +17,45 @@ def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times {|i|yield(i)}                    end
 def repl(st,en,n=1);       n*= -1 if st>en;st.step(en,n){|i|yield(i)} end
 
-def func n,x
-	n >= 0 ? n/x + 1 : 0
+
+w,h,n = gi
+
+m = darray(w,h,0)
+
+rep n do
+	x,y,a = gi
+
+	case a
+	when 1
+		rep x do |j|
+			rep h do |l|
+				m[j][l] = 1
+			end
+		end
+	when 2
+		x.upto w-1 do |j|
+			rep h do |l|
+				m[j][l] = 1
+			end
+		end
+	when 3
+		rep y do |j|
+			rep w do |l|
+				m[l][j] = 1
+			end
+		end
+	when 4
+		 y.upto h-1 do |j|
+			rep w do |l|
+				m[l][j] = 1
+			end
+		end
+	end
 end
 
-a,b,x = gi
-ans = 0
-puts func(b,x) - func(a-1,x)
+ans =  0
+m.each do |mm|
+	ans += mm.count(0)
+end
+puts ans
 

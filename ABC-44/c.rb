@@ -14,14 +14,32 @@ def pr(num);               num.prime_division                         end
 def digit(num);            num.to_s.length                            end
 def array(s,ini=nil);      Array.new(s){ini}                          end
 def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
-def rep(num);              num.times {|i|yield(i)}                    end
-def repl(st,en,n=1);       n*= -1 if st>en;st.step(en,n){|i|yield(i)} end
+def rep(num);              num.times{|i|yield(i)}                     end
+def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
 
-def func n,x
-	n >= 0 ? n/x + 1 : 0
+
+
+n,a = gi
+num = gi
+dp = darray(n+1,2501,0)
+dp[0][0] = 1
+max = 0
+rep n do |k|
+  ct = num[k]
+  repl max,0,-1 do |j|
+    rep n do |i|
+      if dp[i][j] != 0
+        dp[i+1][j+ct] += dp[i][j]
+        if max < j+ct
+          max = j+ct
+        end
+      end
+    end
+  end
+end
+sum = 0
+repl 1, n do |i|
+  sum += dp[i][i*a]
 end
 
-a,b,x = gi
-ans = 0
-puts func(b,x) - func(a-1,x)
-
+puts su

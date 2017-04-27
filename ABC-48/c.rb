@@ -17,11 +17,20 @@ def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times {|i|yield(i)}                    end
 def repl(st,en,n=1);       n*= -1 if st>en;st.step(en,n){|i|yield(i)} end
 
-def func n,x
-	n >= 0 ? n/x + 1 : 0
+N,x = gi
+a = gi
+ans = 0
+rep N-1 do |i|
+	if a[i]+a[i+1] > x
+		s = a[i]+a[i+1]-x
+		ans += s
+		if a[i+1]< s
+			a[i]-= s-a[i+1]
+			a[i+1]= 0
+		else
+			a[i+1] -= s
+		end
+	end
 end
 
-a,b,x = gi
-ans = 0
-puts func(b,x) - func(a-1,x)
-
+puts ans
