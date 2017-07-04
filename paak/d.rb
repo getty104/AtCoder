@@ -13,19 +13,32 @@ def gf;                    gets.split.map(&:to_f)                     end
 def gs;                    gets.chomp.split.map(&:to_s)               end
 def gc;                    gets.chomp.split('')                       end
 def pr(num);               num.prime_division                         end
-def pr?(num);              Prime.prime?(num)                          end
 def digit(num);            num.to_s.length                            end
 def array(s,ini=nil);      Array.new(s){ini}                          end
 def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times{|i|yield(i)}                     end
 def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
 
+
 n = gif
-a = gi
 
+a = array (10**5+1),0
+sum = array (10**5+1),0
 rep n do
-
+	l,r,c = gi
+	a[l-1] += c
+	a[r] -= c
 end
+sum[0] = 0
+repl 1, 10**5 do |i|
+a[i] += a[i-1]
+sum[i]  = sum[i-1]+a[i-1]
+end
+m = gif
 
+rep m do
+l,r = gi
+puts sum[r]-sum[l-1]
+end
 
 

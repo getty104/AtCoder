@@ -2,6 +2,8 @@ require 'prime'
 require 'set'
 require 'tsort'
 include Math
+ALP = ('a'..'z').to_a
+INF = 0xffffffffffffffff
 def max(a,b);              a > b ? a : b                              end
 def min(a,b);              a < b ?  a : b                             end
 def swap(a,b);             a, b = b, a                                end
@@ -20,12 +22,15 @@ def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times{|i|yield(i)}                     end
 def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
 
+s = []
 n = gif
-a = gi
-
-rep n do
-
+num = gi
+rep n do |i|
+  if i % 2 == 0
+    s.push num[i]
+  else
+    s.unshift num[i]
+  end
 end
-
-
-
+s.reverse! if n % 2 == 1
+puts s.join(' ')
