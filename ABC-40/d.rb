@@ -24,99 +24,85 @@ def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
 
 
 
-class PriorityQueue
-  def initialize
-    @size = 0
-    @heap = []
+class UnionFindTree
+
+  class ParArray < Hash
+    def [] key
+      self[key] = key if super(key).nil?
+      super(key)
+    end
   end
+
+  class SizeArray < Hash
+    def [] key
+      self[key] = 1 if super(key).nil?
+      super(key)
+    end
+  end
+
+  def initialize()
+    @par = ParArray.new
+    @size = SizeArray.new
+  end
+
   private
-  def maxHeapify x
-    l = 2*x
-    r = 2*x+1
-    if l <= @size && @heap[l][0] > @heap[x][0]
-      largest = l
-    else
-      largest = x
-    end
-    if r <= @size && @heap[r][0] > @heap[largest][0]
-      largest = r
-    end
-    if largest != x
-      @heap[x], @heap[largest] = @heap[largest], @heap[x]
-      maxHeapify(largest)
-    end
+
+  def find(x)
+    return x if x == @par[x]
+    return @par[x] = find(@par[x])
   end
 
   public
 
-  def pop
-    data = @heap[1][1]
-    @heap[1] = @heap[@size]
-    @size -= 1
-    maxHeapify(1)
-    data
+  def unite(x, y)
+    x = find(x)
+    y = find(y)
+
+    return nil if x == y
+    x, y = y, x if @size[x] < @size[y]
+
+    @par[y] = x
+    @size[x] += @size[y]
   end
 
-  def push key,data
-    @size += 1
-    @heap[@size] = [key,data]
-    i = @size
-    while i > 1 && @heap[i/2][0] < @heap[i][0]
-      @heap[i], @heap[i/2] = @heap[i/2], @heap[i]
-      i /= 2
-    end
+  def same?(x, y)
+    return find(x) == find(y)
   end
 
-  def << key
-    push key,key
+  def size(x)
+    return @size[find(x)]
   end
 
-  def empty?
-    @heap.empty?
-  end
-
-  def size
-    @heap.size
-  end
 end
 
-
-n = gif
-lq = PriorityQueue.new
-rq = PriorityQueue.new
-a = gi
-ls = []
-rs = []
-sum = 0
-rep n do |i|
-  lq << -a[i]
-  sum += a[i]
+n,m = gi
+d = []
+rep m do
+ d << gi
 end
-ls << sum
-sum = 0
-repl 2*n,3*n-1 do |i|
-  rq << a[i]
-  sum += a[i]
+d.sort_by!{|a,b,c| c }
+
+q = gif
+u = UnionFindTree.new
+ans = []
+user = []
+rep q do |i|
+  user << [i]+gi
 end
 
-rs << sum
-
-repl n,2*n-1 do |i|
-  lq << -a[i]
-  tmp = -lq.pop
-  ls << ls[-1] + a[i] - tmp
+user.sort_by!{|a,b,c| c }.reverse!
+user.each do |uu|
+  loop{
+    if d.empty? || uu[2]>=d[-1][2]
+      ans << [uu[0],u.size(uu[1])]
+      break
+    else
+     tmp = d.pop
+     u.unite tmp[0],tmp[1]
+   end
+ }
 end
 
-repl 2*n-1,n,-1 do |i|
-  rq << a[i]
-  tmp = rq.pop
-  rs << rs[-1] + a[i] - tmp
+ans.sort_by{|a,b| a }.each do |a|
+puts a[1]
 end
-
-max = -Float::INFINITY
-rep n do |i|
-  tmp = ls[i]-rs[n-i]
-  max = tmp if max < tmp
-end
-
-puts max

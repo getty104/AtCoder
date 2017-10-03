@@ -22,101 +22,106 @@ def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times{|i|yield(i)}                     end
 def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
 
+class UnionFindTree
 
-
-class PriorityQueue
-  def initialize
-    @size = 0
-    @heap = []
+  class ParArray < Hash
+    def [] key
+      self[key] = key if super(key).nil?
+      super(key)
+    end
   end
+
+  class SizeArray < Hash
+    def [] key
+      self[key] = 1 if super(key).nil?
+      super(key)
+    end
+  end
+
+  def initialize()
+    @par = ParArray.new
+    @size = SizeArray.new
+  end
+
   private
-  def maxHeapify x
-    l = 2*x
-    r = 2*x+1
-    if l <= @size && @heap[l][0] > @heap[x][0]
-      largest = l
-    else
-      largest = x
-    end
-    if r <= @size && @heap[r][0] > @heap[largest][0]
-      largest = r
-    end
-    if largest != x
-      @heap[x], @heap[largest] = @heap[largest], @heap[x]
-      maxHeapify(largest)
-    end
+
+  def find(x)
+    return x if x == @par[x]
+    return @par[x] = find(@par[x])
   end
 
   public
 
-  def pop
-    data = @heap[1][1]
-    @heap[1] = @heap[@size]
-    @size -= 1
-    maxHeapify(1)
-    data
+  def unite(x, y)
+    x = find(x)
+    y = find(y)
+
+    return nil if x == y
+    x, y = y, x if @size[x] < @size[y]
+
+    @par[y] = x
+    @size[x] += @size[y]
   end
 
-  def push key,data
-    @size += 1
-    @heap[@size] = [key,data]
-    i = @size
-    while i > 1 && @heap[i/2][0] < @heap[i][0]
-      @heap[i], @heap[i/2] = @heap[i/2], @heap[i]
-      i /= 2
-    end
+  def same?(x, y)
+    return find(x) == find(y)
   end
 
-  def << key
-    push key,key
+  def size(x)
+    return @size[find(x)]
   end
 
-  def empty?
-    @heap.empty?
-  end
-
-  def size
-    @heap.size
-  end
 end
 
 
+
+
+br = UnionFindTree.new
+wh = UnionFindTree.new
+q1 = []
+q2 = []
 n = gif
-lq = PriorityQueue.new
-rq = PriorityQueue.new
-a = gi
-ls = []
-rs = []
-sum = 0
-rep n do |i|
-  lq << -a[i]
-  sum += a[i]
-end
-ls << sum
-sum = 0
-repl 2*n,3*n-1 do |i|
-  rq << a[i]
-  sum += a[i]
-end
 
-rs << sum
-
-repl n,2*n-1 do |i|
-  lq << -a[i]
-  tmp = -lq.pop
-  ls << ls[-1] + a[i] - tmp
+m = array n+1,[]
+rep n-1 do
+  a,b = gi
+  m[a] << b
+  m[b] << a
 end
+bb = 1
+ww = n
+q1 << bb
+q2 << ww
+loop{
+  loop{
+    bb = q1.shift
+    if wh.same?(n,bb)
+      bb = q1.shift
+      next
+    else
+      br.unite(1,bb)
+      m[bb].each do |bbb|
+        q1 << bbb
+      end
+      break
+    end
+  }
 
-repl 2*n-1,n,-1 do |i|
-  rq << a[i]
-  tmp = rq.pop
-  rs << rs[-1] + a[i] - tmp
-end
+ loop{
+    ww = q2.shift
+    if br.same?(1,ww)
+      ww = q2.shift
+      if ww.nil?
+      end
+      next
+    else
+      wh.unite(n,ww)
+      m[ww].each do |www|
+        q1 << www
+      end
+      break
+    end
+  }
+}
 
-max = -Float::INFINITY
-rep n do |i|
-  tmp = ls[i]-rs[n-i]
-  max = tmp if max < tmp
-end
-
-puts max
+puts br.size(1) > wh.size(n) ? 'Fennec' : 'Snuke'
