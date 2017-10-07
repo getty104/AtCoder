@@ -64,5 +64,6 @@ int main() {
   int ans = 0;
   ans += func(0,0,-1);
   ans += func(0,1,-1);
+  ans %= mod;
   cout << ans << endl;
 }
