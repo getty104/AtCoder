@@ -22,19 +22,18 @@ typedef pair<ll, ll> P;
 #define bcnt __builtin_popcount
 
 #define INF INT_MAX/3
+vector<vector<int>> x;
 int main(){
   cin.sync_with_stdio(false);
-  int n;
-  cin >> n;
-  vector<string> s(n);
-  vector<int> p(n);
-  int m = 0;
-  int sum = 0;
+  int n,k;
+  ll x,y;
+  std::vector<P> mx;
+  std::vector<P> my;
   rep(i,n){
-    cin >> s[i] >> p[i];
-    if(p[m] < p[i])m=i;
-    sum += p[i];
+    cin >> x >> y;
+    mx.pb(make_pair(x,y));
+    my.pb(make_pair(y,x));
   }
-  if(p[m] >= sum/2 +1)cout << s[m] << endl;
-  else cout << "atcoder" << endl;
+  sort(all(mx));
+  sort(all(my));
 }

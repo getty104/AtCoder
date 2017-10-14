@@ -22,19 +22,40 @@ typedef pair<ll, ll> P;
 #define bcnt __builtin_popcount
 
 #define INF INT_MAX/3
+vector< vector<int> > g;
+vector<bool> re;
+vector<int> low;
+int ans = 0;
+int p = 0;
+int func(int current, int parent){
+  int pw = ++p;
+  if(re[current])return low[current];
+  low[current] = pw;
+  re[current] = true;
+  each(tmp,g[current]) {
+    if(tmp == parent)continue;
+   minch(low[current],func(tmp, current));
+  }
+  if(pw == low[current])ans++;
+  return low[current];
+}
 int main(){
   cin.sync_with_stdio(false);
-  int n;
-  cin >> n;
-  vector<string> s(n);
-  vector<int> p(n);
-  int m = 0;
-  int sum = 0;
+  int n,m;
+  cin >> n >> m;
+  g.resize(n);
+  re.resize(n);
+  low.resize(n);
   rep(i,n){
-    cin >> s[i] >> p[i];
-    if(p[m] < p[i])m=i;
-    sum += p[i];
+    low[i] = i;
+    re[i] = false;
   }
-  if(p[m] >= sum/2 +1)cout << s[m] << endl;
-  else cout << "atcoder" << endl;
+  int a,b;
+  rep(i,m){
+    cin >> a >> b;
+    g[a-1].pb(b-1);
+    g[b-1].pb(a-1);
+  }
+  func(0,-1);
+  cout << ans-1 << endl;
 }
