@@ -26,20 +26,19 @@ typedef pair<ll, ll> P;
 int main(){
   cin.sync_with_stdio(false);
   int n,k;
-  int ans = 0;
+  ll ans = 0;
   cin >> n >> k;
-  vector<int> array(n);
+  vector<ll> array(n);
   rep(i,n)cin >> array[i];
   if(exist(array,0))ans = array.size();
   else {
-    int tmp = 1;
-    int l = 0;
+    ll tmp = 1;
+    ll l = 0;
     rep(i,n){
       tmp *= array[i];
-      if(tmp > k)while(tmp > k){
+     while(tmp > k && l <= i) {
         tmp /= array[l];
         l++;
-        if(l > i)break;
       }
       maxch(ans,i-l+1);
     }
