@@ -4,7 +4,7 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
-typedef vector<double> Vector;
+typedef vector<ll> Vector;
 typedef vector<vector<ll>> DVector;
 
 #define fi          first
@@ -28,26 +28,33 @@ typedef vector<vector<ll>> DVector;
 #define usort(x)    sort(all(x))
 #define dsort(x)    sort(all(x),greater<int>())
 #define mkp(x,y)    make_pair(x,y)
-
-double per(int water, int suger){
-  return double(suger*100)/double(water+suger);
+DVector tree;
+int goal;
+bool dfs(int parent,int current,int count) {
+  if(count==3)return false;
+  else if(current == goal)return true;
+  else {
+    bool flag = false;
+    each(itr,tree[current]) {
+      if(parent == itr)continue;
+      if(dfs(current,itr,count+1))flag = true;
+    }
+    return flag;
+  }
 }
-
 int main(){
   cin.sync_with_stdio(false);
-  int a,b,c,d,e,f;
-  cin >> a >> b >> c >> d >> e >> f;
-  int mw=-INF,ms=0;
-  rep(i,30)rep(j,30)rep(k,3000){
-    if(i == 0 && j == 0 )break;
-    int water = (a * i + b * j) * 100;
-    int suger = c*k + mmax(0, mmin((((water/100)*e-c*k)/d)*d,((f-water-c*k)/d)*d));
-    if(water+suger > f || suger > (water/100)*e)continue;
-    if(per(mw,ms)<per(water,suger)){
-      mw = water;
-      ms = suger;
-    }
+  int n,m;
+  cin >> n >> m;
+  tree.resize(n);
+  goal = n-1;
+  int a,b;
+  rep(i,m) {
+    cin >> a >> b;
+    tree[a-1].pb(b-1);
   }
-  if( mw==-INF )mw =100*a;
-  cout << mw+ms << " " << ms << endl;
+  bool flag = false;
+  int parent = -1;
+  bool ans = dfs(parent,0,0);
+  cout << (ans ? "POSSIBLE" : "IMPOSSIBLE") << endl;
 }

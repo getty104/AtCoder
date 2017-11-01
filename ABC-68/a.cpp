@@ -4,7 +4,7 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll, ll> P;
-typedef vector<double> Vector;
+typedef vector<ll> Vector;
 typedef vector<vector<ll>> DVector;
 
 #define fi          first
@@ -29,25 +29,9 @@ typedef vector<vector<ll>> DVector;
 #define dsort(x)    sort(all(x),greater<int>())
 #define mkp(x,y)    make_pair(x,y)
 
-double per(int water, int suger){
-  return double(suger*100)/double(water+suger);
-}
-
 int main(){
   cin.sync_with_stdio(false);
-  int a,b,c,d,e,f;
-  cin >> a >> b >> c >> d >> e >> f;
-  int mw=-INF,ms=0;
-  rep(i,30)rep(j,30)rep(k,3000){
-    if(i == 0 && j == 0 )break;
-    int water = (a * i + b * j) * 100;
-    int suger = c*k + mmax(0, mmin((((water/100)*e-c*k)/d)*d,((f-water-c*k)/d)*d));
-    if(water+suger > f || suger > (water/100)*e)continue;
-    if(per(mw,ms)<per(water,suger)){
-      mw = water;
-      ms = suger;
-    }
-  }
-  if( mw==-INF )mw =100*a;
-  cout << mw+ms << " " << ms << endl;
+  string num;
+  cin >> num;
+  cout << "ABC" << num << endl;
 }
