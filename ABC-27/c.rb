@@ -21,12 +21,4 @@ def array(s,ini=nil);      Array.new(s){ini}                          end
 def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times{|i|yield(i)}                     end
 def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
-
-
-n = gif
-a = gi
-avr = a.inject(:+).to_f/a.size
-sum = 0
-rep n do |i|
-
-end
+p log2 10**18
