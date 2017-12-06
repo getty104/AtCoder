@@ -10,7 +10,7 @@ typedef vector<vector<ll>> DVector;
 #define fi          first
 #define se          second
 #define pb          push_back
-#define INF         INT_MAX/3
+#define INF         INT_MAX
 #define bcnt        __builtin_popcount
 #define all(x)      (x).begin(),(x).end()
 #define dbg(x)      cout<<#x"="<<x<<endl
@@ -28,15 +28,39 @@ typedef vector<vector<ll>> DVector;
 #define usort(x)    sort(all(x))
 #define dsort(x)    sort(all(x),greater<int>())
 #define mkp(x,y)    make_pair(x,y)
-ll n;
-bool dfs(ll num,ll count){
-  if(num > n) return false;
-  else if(count % 2 == 0)return !dfs(num*2,count+1);
-  else if(count % 2 == 1)return !dfs(num*2+1,count+1);
+int n;
+DVector f,p;
+
+ll dfs(Vector a){
+  ll ans;
+  if(a.size() == 10){
+    bool flag = false;
+    rep(i,10)if(a[i] != 0)flag = true;
+    if(!flag)ans = -INF;
+    else{
+      Vector c(n,0);
+      ll sum = 0;
+      rep(i,n)rep(j,10)if(a[j] && f[i][j])c[i]++;
+      rep(i,n) sum += p[i][c[i]];
+      ans = sum;
+    }
+  }else{
+    Vector tmp1 = a;
+    Vector tmp2 = a;
+    tmp1.pb(1);
+    tmp2.pb(0);
+    ans = mmax(dfs(tmp1),dfs(tmp2));
+  }
+  return ans;
 }
 
 int main(){
   cin.sync_with_stdio(false);
   cin >> n;
-  cout << (dfs(1,0) ? "Takahashi" : "Aoki") << endl;
+  f.resize(n,Vector(10));
+  p.resize(n,Vector(11));
+  rep(i,n)rep(j,10)cin >> f[i][j];
+  rep(i,n)rep(j,11)cin >> p[i][j];
+  Vector a;
+  cout << dfs(a) << endl;
 }
