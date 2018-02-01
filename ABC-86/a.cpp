@@ -22,25 +22,16 @@ typedef vector<Vector> DVector;
 #define dsort(x)    sort(all(x),greater<ll>())
 #define mkp(x,y)    make_pair(x,y)
 #define mmax(x,y)   (x>y?x:y)
+#define mmin(x,y)   (x<y?x:y)
 #define maxch(x,y)  x=mmax(x,y)
 #define minch(x,y)  x=mmin(x,y)
 #define exist(x,y)  (find(all(x),y)!=x.end())
 #define each(itr,v) for(auto itr:v)
 #define repl(i,a,b) for(ll i=(ll)(a);i<=(ll)(b);i++)
+
 int main(){
   cin.sync_with_stdio(false);
-  int n;
-  cin >> n;
-  Vector c(n,0),s(n,0),f(n,0);
-  rep(i,n-1)cin >> c[i] >> s[i] >> f[i];
-  rep(i,n){
-    int t = 0;
-    repl(j,i,n-2){
-      if(t < s[j])t = s[j];
-      else if(t % f[j] == 0);
-      else t += f[j] - t % f[j];
-      t += c[j];
-    }
-    cout << t << endl;
-  }
+  int a,b;
+  cin >> a >> b;
+  cout << ((a*b) % 2 == 0 ? "Even" : "Odd" ) << endl;
 }
