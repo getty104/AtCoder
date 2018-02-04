@@ -29,14 +29,22 @@ typedef vector<vector<ll>> DVector;
 #define dsort(x)    sort(all(x),greater<int>())
 #define mkp(x,y)    make_pair(x,y)
 ll n;
-bool dfs(ll num,ll count){
+ll depth = 0;
+bool dfs(ll num, ll count){
   if(num > n) return false;
-  else if(count % 2 == 0)return !dfs(num*2,count+1);
-  else if(count % 2 == 1)return !dfs(num*2+1,count+1);
+  else if(depth % 2 == 0){
+    if(count % 2 == 0)return !dfs(num*2,count+1);
+    else if(count % 2 == 1)return !dfs(num*2+1,count+1);
+  }
+  else if(depth % 2 == 1){
+    if(count % 2 == 0)return !dfs(num*2+1,count+1);
+    else if(count % 2 == 1)return !dfs(num*2,count+1);
+  }
 }
 
 int main(){
   cin.sync_with_stdio(false);
   cin >> n;
-  cout << (dfs(1,0) ? "Takahashi" : "Aoki") << endl;
+  for(ll m = n;m > 0;m /=2)depth++ ;
+  cout << (dfs(1,0) ? "Aoki" : "Takahashi") << endl;
 }

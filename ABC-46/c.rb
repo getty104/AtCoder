@@ -18,14 +18,11 @@ def rep(num);              num.times {|i|yield(i)}                    end
 def repl(st,en,n=1);       n*= -1 if st>en;st.step(en,n){|i|yield(i)} end
 
 n = gif
-a,b = 1,1
-
+a,b = 1, 1
 rep n do
-	m = gf
-	d = max (a/m[0]).ceil.to_i, (b/m[1]).ceil.to_i
-	 a = (m[0]*d).to_f
-	 b = (m[1]*d).to_f
+  x,y = gi
+  m = [(a+x-1)/x, (b+y-1)/y].max
+  a = m * x
+  b = m * y
 end
-
-puts (a+b).to_i
-
+puts (a + b)
