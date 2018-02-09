@@ -35,19 +35,22 @@ int main(){
   cin >> R >> C >> K;
   cin >> N;
   Vector row(R,0),col(C,0);
-
+  Vector r(N),c(N);
   rep(i, N){
-    ll r,c;
-    cin >> r >> c;
-    r--;
-    c--;
-    row[r]++;
-    col[c]++;
+    cin >> r[i] >> c[i];
+    r[i]--;
+    c[i]--;
+    row[r[i]]++;
+    col[c[i]]++;
   }
   Vector sumr(N+1,0),sumc(N+1,0);
   each(itr,row)sumr[itr]++;
   each(itr,col)sumc[itr]++;
   ll ans = 0;
   rep(i,K+1)ans += sumr[i] * sumc[K-i];
+  rep(i,N){
+    if(row[r[i]] + col[c[i]] == K)ans--;
+    else if(row[r[i]] + col[c[i]] == K + 1)ans++;
+  }
   cout << ans << endl;
 }
