@@ -31,37 +31,21 @@ typedef vector<Vector> DVector;
 ll n, m;
 ll a,b;
 DVector mp;
-Vector costs_a;
-Vector costs_b;
+Vector costs;
 struct State{
   ll ct;
   ll pt;
   ll prt;
 };
 
-void create_a(){
+void create(){
   queue<State> states;
   states.push(State{0,a,-1});
   while(states.size() > 0){
     State state = states.front();
     states.pop();
-    if(costs_a[state.pt] != -1)continue;
-    costs_a[state.pt] = state.ct;
-    each(itr, mp[state.pt]){
-      if(itr == state.prt)continue;
-      states.push(State{state.ct+1,itr,state.pt});
-    }
-  }
-}
-
-void create_b(){
-  queue<State> states;
-  states.push(State{0,b,-1});
-  while(states.size() > 0){
-    State state = states.front();
-    states.pop();
-    if(costs_b[state.pt] != -1)continue;
-    costs_b[state.pt] = state.ct;
+    if(costs[state.pt] != -1)continue;
+    costs[state.pt] = state.ct;
     each(itr, mp[state.pt]){
       if(itr == state.prt)continue;
       states.push(State{state.ct+1,itr,state.pt});
@@ -83,8 +67,7 @@ int main(){
   b--;
   cin >> m;
   mp.resize(n);
-  costs_a.resize(n,-1);
-  costs_b.resize(n,-1);
+  costs.resize(n,-1);
   memo.resize(n,-1);
   rep(i,m){
     int x,y;
@@ -92,15 +75,5 @@ int main(){
     mp[x-1].pb(y-1);
     mp[y-1].pb(x-1);
   }
-  create_a();
-  create_b();
-  Vector costs(n);
-  rep(i,n)costs[i] = costs_a[i] + costs_b[i];
-
-  ll sum = -3;
-  each(itr,costs)if(costs[a] == itr){
-    sum++;
-    sum %= ll(10e7) + 9;
-  }
-  cout << sum << endl;
+  create();
 }
