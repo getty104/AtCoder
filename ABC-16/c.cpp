@@ -42,9 +42,11 @@ int main(){
   }
   rep(i,n){
     ll sum = 0;
-    each(itr,tree[i]){
-      each(itr2,tree[itr]){
-        if(!exist(tree[i],itr2) && i != itr2)sum++;
+    set<ll> st;
+    each(itr, tree[i])each(itr2, tree[itr]){
+      if(!exist(tree[i], itr2) && i != itr2 && !st.count(itr2)){
+        sum++;
+        st.insert(itr2);
       }
     }
     cout << sum << endl;
