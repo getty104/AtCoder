@@ -22,7 +22,12 @@ def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times{|i|yield(i)}                     end
 def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
 
-str = gc
-str.map!{|s| s.downcase}
-str[0].upcase!
-puts str.join
+
+c = [1,2,3,4,5,6]
+n = gif
+
+rep n % 30 do |i|
+  c[i % 5], c[i % 5 + 1] = c[i % 5 + 1], c[i % 5]
+end
+
+puts c.join
