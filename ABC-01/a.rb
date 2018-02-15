@@ -23,3 +23,4 @@ def rep(num);              num.times{|i|yield(i)}                     end
 def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
 h1 =gif
 h2 = gif
+puts h1 - h2
