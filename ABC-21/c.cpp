@@ -31,6 +31,7 @@ typedef vector<Vector> DVector;
 ll n, m;
 ll a,b;
 DVector mp;
+DVector dag;
 Vector costs;
 struct State{
   ll ct;
@@ -48,14 +49,39 @@ void create(){
     costs[state.pt] = state.ct;
     each(itr, mp[state.pt]){
       if(itr == state.prt)continue;
-      states.push(State{state.ct+1,itr,state.pt});
+      states.push(State{state.ct+1, itr, state.pt});
+    }
+  }
+}
+
+void create_dag(){
+  queue<State> states;
+  states.push(State{0,a,-1});
+  set<ll> pushed;
+  while(states.size() > 0){
+    State state = states.front();
+    states.pop();
+    each(itr, mp[state.pt]){
+      if(itr == state.prt || costs[itr] != state.ct+1)continue;
+      dag[state.pt].pb(itr);
+      if(!pushed.count(itr)){
+        states.push(State{state.ct+1,itr,state.pt});
+        pushed.insert(itr);
+      }
     }
   }
 }
 
 Vector memo;
-ll dfs(int current){
-
+ll dfs(ll current){
+  if(memo[current] == -1){
+    ll sum = 0;
+    each(itr,dag[current]){
+      sum += dfs(itr);
+    }
+    memo[current] = sum;
+  }
+  return memo[current];
 }
 
 int main(){
@@ -67,8 +93,10 @@ int main(){
   b--;
   cin >> m;
   mp.resize(n);
+  dag.resize(n);
   costs.resize(n,-1);
   memo.resize(n,-1);
+  memo[b] = 1;
   rep(i,m){
     int x,y;
     cin >> x >> y;
@@ -76,4 +104,7 @@ int main(){
     mp[y-1].pb(x-1);
   }
   create();
+  create_dag();
+  ll mod = 1000000000 + 7;
+  cout << dfs(a) % mod << endl;
 }
