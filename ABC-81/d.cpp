@@ -39,6 +39,8 @@ int main(){
   ta = a;
   usort(ta);
   rep(i,n-1){
-    if()
+    if(a[i] > a[i+1]){
+      ll diff = a[i] - a[i+1];
+    }
   }
 }
