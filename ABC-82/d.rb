@@ -22,60 +22,28 @@ def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times{|i|yield(i)}                     end
 def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
 
-s = gc
+s = gsf
 x,y = gi
-tx,ty = 0,0
-dir = 0
-
-s.each do |ss|
-  case ss
-  when 'F'
-    case dir
-    when 0
-      tx += 1
-    when 1
-      ty += 1
-    when 2
-      tx -= 1
-    when 3
-      ty -= 1
-    end
-  when 'T'
-    case
-    when dir == 0 && y - ty > 0
-      dir = 1
-    when dir == 0 && y - ty < 0
-      dir = 3
-    when dir == 0 && y - ty == 0
-      if x - tx < 0
-        dir = 3
-      end
-    when dir == 1 && x - tx > 0
-      dir = 0
-    when dir == 1 && x - tx < 0
-      dir = 2
-    when dir == 1 && x - tx == 0
-      if y - ty < 0
-        dir = 2
-      end
-    when dir == 2 && y - ty > 0
-      dir = 1
-    when dir == 2 && y - ty < 0
-      dir = 3
-    when dir == 2 && y - ty == 0
-      if x - tx > 0
-        dir = 3
-      end
-    when dir == 3 && x - tx > 0
-      dir = 0
-    when dir == 3 && x - tx < 0
-      dir = 2
-    when dir == 3 && x - tx == 0
-      if y - ty > 0
-        dir = 2
-      end
-    end
+d = s.split('T').map{|ss|ss.size}
+dpx = darray d.size, 20000, false
+dpy = darray d.size, 20000, false
+dpx[0][d[0]] = true
+dpy[0][d[1]] = true
+idx = 0
+idy = 1
+repl 2, d.size - 1, 2 do |i|
+  idx+=2
+  rep x+1 do |tx|
+    dpx[i][tx] = dpx[i - 2][tx - d[i]] || dpx[i - 2][tx + d[i]]
   end
 end
 
-puts tx == x && ty == y ? 'Yes' : 'No'
+repl 3, d.size - 1, 2 do |i|
+  idy += 2
+  rep y+1 do |ty|
+    dpy[i][ty] = dpy[i - 2][ty - d[i]] || dpy[i - 2][ty + d[i]]
+  end
+end
+
+
+puts dpx[idx][x] && dpy[idy][y] ? 'Yes' : 'No'
