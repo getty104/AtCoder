@@ -4,7 +4,6 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<ll,ll> P;
-typedef pair<ll,P> PP;
 typedef vector<ll> Vector;
 typedef vector<Vector> DVector;
 
@@ -29,34 +28,23 @@ typedef vector<Vector> DVector;
 #define exist(x,y)  (find(all(x),y)!=x.end())
 #define each(itr,v) for(auto itr:v)
 #define repl(i,a,b) for(ll i=(ll)(a);i<=(ll)(b);i++)
-DVector mp;
 
-bool djk(){
-  priority_queue<PP> pq;
-  P start = mkp(0,1);
-  pq.push(mkp(mp[0][1],start));
-  while(pq.size()){
-    PP state = pq.top();
-    pq.pop();
-    if(state.fi > 0 && state.fi < mp[state.se.fi][state.se.se])return false;
-    if(state.fi > 0 && state.fi == mp[state.se.fi][state.se.se])each(itr,mp[state.se.se]){
-      ll cost = mp[state.se.fi][state.se.se]+mp[state.se.se][itr];
-      pq.push(mkp(cost,mkp(state.se.fi,itr)));
-    }
-  }
-  return true;
-}
 
 int main(){
   cin.sync_with_stdio(false);
   ll n;
   cin >> n;
-  mp.resize(n, Vector(n));
-  rep(i,n)rep(j,n){
-    ll a;
-    cin >> a;
-    mp[i][j] = a;
-    mp[j][i] = a;
+  DVector d(n,Vector(n));
+  rep(i,n)rep(j,n)cin >> d[i][j];
+  DVector t = d;
+  ll flag = true;
+  rep(i,n)rep(j,n)rep(k,n)flag = flag && (t[i][j] <= t[i][k] + t[k][j]);
+  ll ans = 0;
+  if(flag){
+    rep(k,n)rep(i,n)rep(j,n)if((d[i][j] > 0 && d[i][k] > 0 && d[k][j] > 0 ) && d[i][j] == d[i][k] + d[k][j])d[i][j] = 0;
+    rep(i,n)repl(j,i+1,n-1)ans+=d[i][j];
+  }else{
+    ans = -1;
   }
-  cout << djk() << endl;
+  cout << ans << endl;
 }
