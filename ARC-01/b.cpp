@@ -32,15 +32,48 @@ typedef priority_queue<PP, vector<PP>, greater<PP>> PPQueue;
 #define each(itr,v) for(auto itr:v)
 #define repl(i,a,b) for(ll i=(ll)(a);i<=(ll)(b);i++)
 DVector mp(41,Vector(41,INF));
+ll a,b;
 
 int main(){
   cin.sync_with_stdio(false);
-  ll a,b;
-  cin >> a,b;
-  mp[a][a] = 0;
-  mp[b][b] = 0;
-  rep(i,41){
-    mp[a][i] = abs(a-i);
-    mp[i][a] = abs(a-i);
+  cin >> a >> b;
+  rep(i,41)mp[i][i] = 0;
+  repl(j,1,40){
+    repl(i,1,40){
+      if(j-i >= 0){
+        mp[j][j-i] = i;
+        mp[j-i][j] = i;
+      }
+      if(j+i <= 40){
+        mp[j][j+i] = i;
+        mp[j+i][j] = i;
+      }
+    }
   }
+  repl(j,1,40){
+    repl(i,1,8){
+      if(j-5*i >= 0){
+        mp[j][j-5*i] = i;
+        mp[j-5*i][j] = i;
+      }
+      if(j+5*i <= 40){
+        mp[j][j+5*i] = i;
+        mp[j+5*i][j] = i;
+      }
+    }
+  }
+  repl(j,1,40){
+    repl(i,1,4){
+      if(j-10*i >= 0){
+        mp[j][j-10*i] = i;
+        mp[j-10*i][j] = i;
+      }
+      if(j+10*i <= 40){
+        mp[j][j+10*i] = i;
+        mp[j+10*i][j] = i;
+      }
+    }
+  }
+  rep(k,41)rep(i,41)rep(j,41)minch(mp[i][j],mp[i][k]+mp[k][j]);
+  cout << mp[a][b] << endl;
 }
