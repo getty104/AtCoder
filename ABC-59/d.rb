@@ -16,3 +16,5 @@ def array(s,ini=nil);      Array.new(s){ini}                          end
 def darray(s1,s2,ini=nil); Array.new(s1){Array.new(s2){ini}}          end
 def rep(num);              num.times{|i|yield(i)}                     end
 def repl(st,en,n=1);       st.step(en,n){|i|yield(i)}                 end
+x,y = gi
+puts (x-y).abs <= 1 ? 'Brown' : 'Alice'
