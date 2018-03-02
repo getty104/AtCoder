@@ -32,30 +32,31 @@ typedef priority_queue<PP, vector<PP>, greater<PP>> PPQueue;
 #define exist(x,y)  (find(all(x),y)!=x.end())
 #define each(itr,v) for(auto itr:v)
 #define repl(i,a,b) for(ll i=(ll)(a);i<=(ll)(b);i++)
-ll n, m;
-DVector tree;
-DVector costs;
-set<ll> st;
-void rds(){
-  PPQueue pq;
-  pq.push(mkp(0,mkp(0,0)));
-  while(pq.size()){
-
-  }
-}
 
 int main(){
   cin.sync_with_stdio(false);
+  ll n, m;
   cin >> n >> m;
-  tree.resize(n);
-  costs.resize(n,Vector(n,INF));
-  rep(i,n)costs[i][i] = 0;
+  DVector mp(n,Vector(n,INF));
+  vector<P> edges;
+  rep(i,n)mp[i][i] = 0;
   rep(i,m){
     ll a,b,c;
     cin >> a >> b >> c;
-    costs[a-1][b-1] = c;
-    costs[b-1][a-1] = c;
-    tree[a-1].pb(b);
-    tree[b-1].pb(a);
+    mp[a-1][b-1] = c;
+    mp[b-1][a-1] = c;
+    edges.pb(mkp(a-1,b-1));
+    edges.pb(mkp(b-1,a-1));
   }
+
+  DVector tmp = mp;
+  rep(k,n)rep(i,n)rep(j,n)minch(mp[i][j],mp[i][k]+mp[k][j]);
+  vector<vector<bool>> jd(n,vector<bool>(n,false));
+  rep(s,n)rep(t,n)each(edge,edges)if(mp[s][edge.fi]+tmp[edge.fi][edge.se]+mp[edge.se][t] == mp[s][t]){
+    jd[edge.fi][edge.se] = true;
+    jd[edge.se][edge.fi] = true;
+  }
+  ll sum = 0;
+  each(edge,edges)if(!jd[edge.fi][edge.se])sum++;
+  cout << sum/2 << endl;
 }
