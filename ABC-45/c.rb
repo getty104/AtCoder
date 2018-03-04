@@ -21,17 +21,17 @@ num = gc
 data = []
 data << num[0]
 repl 1, num.size-1 do |i|
-	cu = []
-	data.each do |d|
-		cu << d + '+'+ num[i]
-		cu << d + num[i]
-	end
-	data = cu.dup
+  cu = []
+  data.each do |d|
+    cu << d + '+'+ num[i]
+    cu << d + num[i]
+  end
+  data = cu.dup
 end
 
 ans = 0
 data.each do |d|
-	eval "ans+=#{d}"
+  eval "ans+=#{d}"
 end
 
 puts ans
