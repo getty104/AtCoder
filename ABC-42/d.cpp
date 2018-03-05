@@ -62,7 +62,7 @@ int main(){
   cin.sync_with_stdio(false);
   cin >> h >> w >> a >> b;
   ll ans = 0;
-  mod_fact(10000000,MOD);
+  mod_fact(1000000,MOD);
   rep(i,min(h - a, w - b)){
     ans += mod_comb(h - a + b - 1, b + i,MOD) * mod_comb(w - b + a - 1, a + i,MOD);
     ans %= MOD;
