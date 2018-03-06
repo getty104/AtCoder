@@ -33,52 +33,51 @@ typedef priority_queue<PP, vector<PP>, greater<PP>> PPQueue;
 #define each(itr,v) for(auto itr:v)
 #define repl(i,a,b) for(ll i=(ll)(a);i<=(ll)(b);i++)
 
-Vector dy{0, 0, 1, -1, 1, 1, -1, -1,0};
-Vector dx{1, -1, 0, 0, 1, -1, -1, 1,0};
+string s[100];
+char ans[100][105];
+bool ok[100][100];
+int H,W;
 
-ll h,w;
-vector<string> s(300), ans(300);
-bool next_white(ll i,ll j) {
-  bool ret = false;
-  rep(k,9){
-    ll x = i + dx[k];
-    ll y = j + dy[k];
-    if((0 <= x && x < h && 0 <= y && y < w) && s[x][y] == '.' )ret = true;
+bool all_black(int y,int x){
+  bool f = true;
+  repl(dy, -1,1)repl(dx,-1,1){
+    ll ny = y + dy,nx = x + dx;
+    if(ny < 0 || ny >= H || nx < 0 || nx >= W)continue;
+    if(s[ny][nx] == '.'){
+      f=false;
+      break;
+    }
   }
-  return ret;
+  return f;
 }
 
-int main(){
+signed main(){
   cin.sync_with_stdio(false);
-  cin >> h >> w;
-
-  rep(i,h)cin >> s[i];
-
-  rep(i,h)rep(j,w){
-    if(s[i][j] == '.'){
-      ans[i][j] = '.';
-    }else if(next_white(i,j)){
-      bool f = true;
-      rep(k,8){
-        ll x = i + dx[k];
-        ll y = j + dy[k];
-        if((0 <= x && x < h && 0 <= y && y < w) && s[x][y] == '#' && !next_white(x,y)){
-          f = false;
-          break;
-        }
+  cin >> H >> W;
+  rep(i,H)cin>>s[i];
+  rep(y,H)rep(x,W)ans[y][x]='.';
+  rep(y,H)rep(x,W){
+    if(s[y][x]=='.')continue;
+    if(all_black(y,x)){
+      ans[y][x]='#';
+      repl(dy,-1,1)repl(dx,-1,1){
+        ll ny = y + dy, nx = x + dx;
+        if(ny < 0 || ny >= H || nx < 0 || nx >= W)continue;
+        ok[ny][nx]=true;
       }
-      if(f){
-        cout << "impossible" << endl;
-        return 0;
-      }
-      ans[i][j] = '.';
-    }else ans[i][j] = '#';
+    }
   }
-  cout << "possible" << endl;
 
-  rep(i,h){
-    rep(j,w)cout << ans[i][j];
-    cout << endl;
+  rep(y,H)rep(x,W){
+    if(s[y][x]=='#' && !ok[y][x]){
+      cout<<"impossible"<<endl;
+      return 0;
+    }
   }
-  return 0;
+
+  cout<<"possible"<<endl;
+  rep(y,H){
+    rep(x,W)cout<<ans[y][x];
+    cout<<endl;
+  }
 }
