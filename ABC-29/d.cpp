@@ -29,23 +29,31 @@ typedef priority_queue<P, vector<P>, greater<P>> PQ;
 #define each(itr,v)    for(auto itr:v)
 #define repl(i,a,b)    for(ll i=(ll)(a);i<=(ll)(b);i++)
 #define dvec(n1,n2,i)  DVec(n1,Vec(n2,i))
-double comb(int n,int r){
-  if(n<r)return 0.0;
-  if(n-r<r)r=n-r;
-  double res=1;
-  for(int i=0;i<r;i++){
-    res*=n;
-    n--;
-    res/=i+1;
+
+string N;
+vector<DVec> memo(12,dvec(2,12,-1));
+
+// flag : 未満フラグ
+ll rec(ll now = 0, bool flag = false, ll cnt = 0){
+  if(now == N.size())return cnt;
+  if(memo[now][flag][cnt] != -1) return memo[now][flag][cnt];
+
+  ll x = N[now] - '0';
+  ll r = (flag ? 9 : x);
+
+  ll res = memo[now][flag][cnt];
+  res = 0;
+
+  rep(i,r+1){  // now桁目(0-indexed)をiにする
+    if(!flag and i==r)res += rec(now+1,false,cnt+(i==1));
+    else res += rec(now+1,true,cnt+(i==1));
   }
+  memo[now][flag][cnt] = res;
   return res;
 }
 
-ll N;
 int main(){
   cin.sync_with_stdio(false);
   cin >> N;
-
-
-  return 0;
+  cout << rec() << endl;
 }
