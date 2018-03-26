@@ -29,11 +29,32 @@ typedef priority_queue<P, vector<P>, greater<P>> PQ;
 #define each(itr,v)    for(auto itr:v)
 #define repl(i,a,b)    for(ll i=(ll)(a);i<=(ll)(b);i++)
 #define dvec(n1,n2,i)  DVec(n1,Vec(n2,i))
+vector<vector<char>> area(102,vector<char>(102));
 
 ll a,b;
 int main(){
   cin.sync_with_stdio(false);
   cin >> a >> b;
+  rep(i,50)rep(j,100){
+    area[i][j] = '#';
+    area[i+50][j] = '.';
+  }
+  a--;b--;
 
+  for(ll i = 1; i<50; i+=2)for(ll j = 1; j < 100; j+=2){
+    if(a > 0){
+      area[i][j] = '.';
+      a--;
+    }
+    if(b > 0){
+      area[i+50][j] = '#';
+      b--;
+    }
+  }
+  cout << 100 << ' ' << 100 << endl;
+  rep(i,100){
+    rep(j,100)cout << area[i][j];
+    cout << endl;
+  }
   return 0;
 }
