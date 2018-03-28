@@ -12,6 +12,7 @@ typedef priority_queue<P, vector<P>, greater<P>> PQ;
 #define se             second
 #define pb             push_back
 #define INF            LLONG_MAX/3
+#define MOD            1000000007
 #define bcnt           __builtin_popcount
 #define all(x)         (x).begin(),(x).end()
 #define uni(x)         x.erase(unique(all(x)),x.end())
@@ -25,43 +26,31 @@ typedef priority_queue<P, vector<P>, greater<P>> PQ;
 #define maxch(x,y)     x=mmax(x,y)
 #define minch(x,y)     x=mmin(x,y)
 #define exist(x,y)     (find(all(x),y)!=x.end())
-#define each(itr,v)    for(auto& itr:v)
-#define repl(i,a,b)    for(int i=(int)(a);i<=(int)(b);i++)
+#define each(itr,v)    for(auto itr:v)
+#define repl(i,a,b)    for(ll i=(ll)(a);i<=(ll)(b);i++)
 #define dvec(n1,n2,i)  DVec(n1,Vec(n2,i))
-
-const ll MOD = (ll)10e9 + 7;
-vector<int> none;
-int a[25], pos[25];
-ll dp[1 << 25];
-
-void f(int s, int t) {
-  int y = t / 5, x = t % 5;
-  if(s & (1 << t))return;
-  if(y > 0 && y < 4 && ((s >> (t - 5)) ^ (s >> (t + 5))) & 1)return;
-  if(x > 0 && x < 4 && ((s >> (t - 1)) ^ (s >> (t + 1))) & 1)return;
-  (dp[s | (1 << t)] += dp[s]) %= MOD;
-}
-
-int main() {
-  cin.tie(0);
+double N;
+double A,B;
+vector<double> S;
+int main(){
   cin.sync_with_stdio(false);
-  fill(pos,pos+25,-1);
-
-  for(int i = 0; i < 25; i++) {
-    cin >> a[i];
-    a[i]--;
-    if(a[i] < 0)none.pb(i);
-    else pos[a[i]] = i;
+  cin >> N >> A >> B;
+  S.resize(N);
+  rep(i,N)cin >> S[i];
+  double mx = -INF;
+  double mn = INF;
+  rep(i,N)maxch(mx,S[i]);
+  rep(i,N)minch(mn,S[i]);
+  double P,Q;
+  if(mx - mn == 0){
+    cout << -1 << endl;
+    return 0;
   }
-
-  dp[0] = 1;
-  for(int i = 0; i < 1 << 25; i++){
-    if(!dp[i])continue;
-    int bit = bcnt(i);
-    if(pos[bit] >= 0)f(i, pos[bit]);
-    else for(auto& j : none)f(i, j);
-  }
-  cout << dp[(1 << 25) - 1] << endl;
-
+  P = B / (mx - mn);
+  double h = 0;
+  rep(i,N)h += S[i];
+  h /= N;
+  Q = A - h * P ;
+  cout << setprecision(10) <<  P << " " << setprecision(10) << Q << endl;
   return 0;
 }
