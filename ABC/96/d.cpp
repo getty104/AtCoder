@@ -33,8 +33,9 @@ typedef priority_queue<P, vector<P>, greater<P>> PQ;
 #define dvec(n1,n2,i)     DVec(n1,Vec(n2,i))
 #define tvec(n1,n2,n3,i)  TVec(n1,dvec(n2,n3,i))
 #define MAX_N 55555
+
 // エラトステネスの篩 [1,n]
-bool is_prime[MAX_N];
+bool is_prime[MAX_N+1];
 
 void sieve(ll n){
   for(ll i=0;i<=n;i++)is_prime[i]=true;
@@ -50,5 +51,13 @@ void sieve(ll n){
 int main() {
   cin.sync_with_stdio(false);
   sieve(MAX_N);
+  Vec prs;
+  for(auto i=1; i*5+1 <= MAX_N; i++){
+    if(is_prime[i*5+1])prs.pb(i*5+1);
+  }
+  ll N;
+  cin >> N;
+  rep(i,N)cout << prs[i] << (i == N-1 ? "" : " ");
+  cout << endl;
   return 0;
 }
